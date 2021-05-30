@@ -46,6 +46,7 @@ class _HistoriesPageState extends State<HistoriesPage> {
             // minHeight: 500,
           ),
           child: Column(children: [
+            SizedBox(height: 30),
             Container(
                 width: 100,
                 height: 100,
@@ -80,7 +81,7 @@ class _HistoriesPageState extends State<HistoriesPage> {
                     );
                   }
                 }),
-            SizedBox(height: 30),
+            SizedBox(height: 15),
             RichText(
               text: TextSpan(
                 text: "Minhas Tarefas",
@@ -90,7 +91,7 @@ class _HistoriesPageState extends State<HistoriesPage> {
                     fontSize: 48),
               ),
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 15),
             Expanded(
               child: ListView(
                 children: items.map<Widget>((item) {
