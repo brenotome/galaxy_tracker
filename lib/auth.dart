@@ -11,8 +11,5 @@ Future<Response> authenticate(username, password) async{
       HttpHeaders.authorizationHeader: 'Basic ' + base64Encode(utf8.encode('$username:$password'))
     }
   );
-  if (response.statusCode == 200) {
-    print(response);
-  }
   return response;
 }

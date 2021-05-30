@@ -17,8 +17,6 @@ class _HistoriesPageState extends State<HistoriesPage> {
   @override
   void initState() {
     super.initState();
-    items.add(HistoryItem('1', 'name', 'status'));
-    items.add(HistoryItem('2', 'name2', 'status'));
   }
 
   Future get_histories() async {
