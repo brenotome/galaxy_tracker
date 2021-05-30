@@ -102,9 +102,6 @@ class LoginFormState extends State<LoginForm> {
                     GetStorage().write('token', apiKey);
                     Navigator.pushNamed(context, '/histories');
                   }
-
-                  print(response.statusCode);
-                  print(response.body);
                 }
               },
               child: Text("Login"),

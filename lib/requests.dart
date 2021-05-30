@@ -1,6 +1,5 @@
 import 'package:galaxy_tracker/models.dart';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:http/http.dart';
 
@@ -18,6 +17,15 @@ class Requests {
     );
     List<History> list = [for(var i in jsonDecode(response.body)) History.fromJson(i)];
 
+    return list;
+  }
+
+  Future<List> get_history_items(id) async{
+    final response = await get(
+      Uri.http(baseUrl, '/api/histories/$id/contents', {'key': apiKey}),
+    );
+    List<HistoryItem> list = [for(var i in jsonDecode(response.body)) HistoryItem.fromJson(i)];
+    
     return list;
   }
 }

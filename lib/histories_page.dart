@@ -12,9 +12,13 @@ class _HistoriesPageState extends State<HistoriesPage> {
   String dropdownValue = '0';
   String apiKey;
   List<History> histories;
+  List<HistoryItem> items = [];
+
   @override
   void initState() {
     super.initState();
+    items.add(HistoryItem('1', 'name', 'status'));
+    items.add(HistoryItem('2', 'name2', 'status'));
   }
 
   Future get_histories() async {
@@ -24,6 +28,11 @@ class _HistoriesPageState extends State<HistoriesPage> {
     histories.add(History('0', "Histórico"));
     setState(() {});
     return histories;
+  }
+  Future update_items(id) async{
+    final request = Requests(apiKey);
+    histories = await request.get_histories();
+    items = await request.get_history_items(id);
   }
 
   @override
@@ -38,36 +47,72 @@ class _HistoriesPageState extends State<HistoriesPage> {
             // minHeight: 500,
           ),
           child: Column(children: [
-            Image(
-              image: AssetImage("assets/graphics/dna.png"),
-            ),
+            Container(
+                width: 100,
+                height: 100,
+                child: Image(
+                  image: AssetImage("assets/graphics/dna.png"),
+                )),
             FutureBuilder(
-              future: get_histories(),
-              builder:
-                (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.hasData) {
-                return DropdownButton(
-                    value: dropdownValue,
-                    style: const TextStyle(color: Colors.black),
-                    onChanged: (value) {
-                      setState(() {
-                        dropdownValue = value;
-                      });
-                    },
-                    items: histories.map<DropdownMenuItem>((history) {
-                      return DropdownMenuItem(
-                        value: history.id,
-                        child: Text(history.name),
-                      );
-                    }).toList());
-              } else {
-                return DropdownButton(
-                  value: '0',
-                  items: [DropdownMenuItem(value: '0', child: Text('Aguarde'))],
-                );
-              }
-            }),
-            // Spacer(flex: 4,),
+                future: get_histories(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    return DropdownButton(
+                        value: dropdownValue,
+                        style: const TextStyle(color: Colors.black),
+                        onChanged: (value) {
+                          update_items(value);
+                          setState(() {
+                            dropdownValue = value;
+                          });
+                        },
+                        items: histories.map<DropdownMenuItem>((history) {
+                          return DropdownMenuItem(
+                            value: history.id,
+                            child: Text(history.name),
+                          );
+                        }).toList());
+                  } else {
+                    return DropdownButton(
+                      value: '0',
+                      items: [
+                        DropdownMenuItem(value: '0', child: Text('Aguarde'))
+                      ],
+                    );
+                  }
+                }),
+            SizedBox(height: 30),
+            RichText(
+              text: TextSpan(
+                text: "Minhas Tarefas",
+                style: TextStyle(
+                    fontFamily: "Roboto",
+                    color: Color(0xFF3A6175),
+                    fontSize: 48),
+              ),
+            ),
+            SizedBox(height: 30),
+            Expanded(
+              child: ListView(
+                children: items.map<Widget>((item) {
+                  Color stateColor;
+                  if (item.state == 'ok') {
+                    stateColor = Color(0xFFD5EDAB);
+                  } else if (item.state == 'failed') {
+                    stateColor = Color(0xFFFF9B9B);
+                  } else if (item.state == 'pprocessing') {
+                    stateColor = Color(0xFFFFD564);
+                  } else {
+                    stateColor = Color(0xFFCBD7DD);
+                  }
+                  return Container(
+                      color: stateColor,
+                      child: ListTile(
+                        title: Text(item.name),
+                      ));
+                }).toList(),
+              ),
+            ),
           ]),
         ),
       ),
