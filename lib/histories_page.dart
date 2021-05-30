@@ -29,8 +29,9 @@ class _HistoriesPageState extends State<HistoriesPage> {
   }
   Future update_items(id) async{
     final request = Requests(apiKey);
-    histories = await request.get_histories();
-    items = await request.get_history_items(id);
+    if(id != '0'){
+      items = await request.get_history_items(id);
+    }
   }
 
   @override
